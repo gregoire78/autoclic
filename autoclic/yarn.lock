@@ -222,6 +222,11 @@
   resolved "https://registry.npmjs.org/@napi-rs/lzma-linux-x64-gnu/-/lzma-linux-x64-gnu-1.4.3.tgz"
   integrity sha512-ep6PLjN1+g4P12Hc7sLRmVpXXaHX22ykqxnOzjXUoj1KTph5XgM4+fUCyE5dsYI+lB4/tXqFuf9ZeFgHk5f00A==
 
+"@napi-rs/lzma-linux-x64-musl@1.4.3":
+  version "1.4.3"
+  resolved "https://registry.npmjs.org/@napi-rs/lzma-linux-x64-musl/-/lzma-linux-x64-musl-1.4.3.tgz"
+  integrity sha512-QkCO6rVw0Z7eY0ziVc4aCFplbOTMpt0UBLPXWxsPd2lXtkAlRChzqaHOxdcL/HoLmBsqdCxmG0EZuHuAP/vKZQ==
+
 "@napi-rs/lzma@^1.4.1":
   version "1.4.3"
   resolved "https://registry.npmjs.org/@napi-rs/lzma/-/lzma-1.4.3.tgz"
@@ -250,6 +255,11 @@
   resolved "https://registry.npmjs.org/@napi-rs/tar-linux-x64-gnu/-/tar-linux-x64-gnu-0.1.5.tgz"
   integrity sha512-y8pFyVTU6lSYiW2lse6i1Ns9yt9mBkAqPbcJnIjqC7ZqRd61T6g3XZDSrKmsM6ycTfsAqoE5WyyFxBjQN29AOA==
 
+"@napi-rs/tar-linux-x64-musl@0.1.5":
+  version "0.1.5"
+  resolved "https://registry.npmjs.org/@napi-rs/tar-linux-x64-musl/-/tar-linux-x64-musl-0.1.5.tgz"
+  integrity sha512-8phLYc0QX+tqvp34PQHUulZUi4sy/fdg1KgFHiyYExTRRleBB01vM7KSn7Bk9dwH7lannO5D7j4O8OY46Xcr/A==
+
 "@napi-rs/tar@^0.1.4":
   version "0.1.5"
   resolved "https://registry.npmjs.org/@napi-rs/tar/-/tar-0.1.5.tgz"
@@ -276,6 +286,11 @@
   version "0.0.3"
   resolved "https://registry.npmjs.org/@napi-rs/wasm-tools-linux-x64-gnu/-/wasm-tools-linux-x64-gnu-0.0.3.tgz"
   integrity sha512-mfMvMEqn33YtEjIyLPguZ6yDsNtF5zV7mqc99620YDyj2SLa0aI35TNTc7Dm+/hlgqHRKhdudsWGfYc4dBND2Q==
+
+"@napi-rs/wasm-tools-linux-x64-musl@0.0.3":
+  version "0.0.3"
+  resolved "https://registry.npmjs.org/@napi-rs/wasm-tools-linux-x64-musl/-/wasm-tools-linux-x64-musl-0.0.3.tgz"
+  integrity sha512-KXMsXWGELoN5xgPCoRHbgt5TScSx8BK2GcCHKJ9OPZ2HMfsXbLgS/SNi6vz1CbLMZMLPBY2G6HAk0gzLGyS0mQ==
 
 "@napi-rs/wasm-tools@^0.0.3":
   version "0.0.3"
@@ -416,6 +431,11 @@
   resolved "https://registry.npmjs.org/@oxc-node/core-linux-x64-gnu/-/core-linux-x64-gnu-0.0.29.tgz"
   integrity sha512-rdhOFthOi/VG7NkmlzAouY7DJKmz3UFDzW+JSTUjo3FuvUtnKGHZUv28hgc+Pp73IBW7zXbqZEON4Q+6FnEE6Q==
 
+"@oxc-node/core-linux-x64-musl@0.0.29":
+  version "0.0.29"
+  resolved "https://registry.npmjs.org/@oxc-node/core-linux-x64-musl/-/core-linux-x64-musl-0.0.29.tgz"
+  integrity sha512-jm8ECk0AxYO/Aq9Tr+FoqyFaxbL2x+eda0JBQMm9o9uzzK3uQM6Wouab64khcKnfdgCWgaC/o9ul2itwYrXltw==
+
 "@oxc-node/core@^0.0.29":
   version "0.0.29"
   resolved "https://registry.npmjs.org/@oxc-node/core/-/core-0.0.29.tgz"
@@ -444,6 +464,11 @@
   version "1.8.0"
   resolved "https://registry.npmjs.org/@oxlint/linux-x64-gnu/-/linux-x64-gnu-1.8.0.tgz"
   integrity sha512-qPEF8tKMu+63b58gPfwU3KyJf2z9KyorbrC0yGXFHQLzRPEtrh6bAjf+AzCs3n8WhDR1K6jPgcPT4Sp8bahCyQ==
+
+"@oxlint/linux-x64-musl@1.8.0":
+  version "1.8.0"
+  resolved "https://registry.npmjs.org/@oxlint/linux-x64-musl/-/linux-x64-musl-1.8.0.tgz"
+  integrity sha512-JyErk/LsLg/tA3XkHhU8VIxahOdq56L99mbpMFGLTkOQgtnhY2MDAYULVgOuFFX3v6Q02o4mpIR/SwW/tRnZlg==
 
 "@pkgjs/parseargs@^0.11.0":
   version "0.11.0"
