@@ -4,10 +4,7 @@
 			"path": "."
 		},
 		{
-			"path": "autoclic"
-		},
-		{
-			"path": "autoclic-app"
+			"path": "autoclic-app/autoclic"
 		}
 	],
 	"settings": {}
