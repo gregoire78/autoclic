@@ -1,0 +1,22 @@
+
+[package]
+authors = ["gregoire78 <gregoire@joncour.dev>"]
+edition = "2021"
+name = "autoclic"
+version = "0.1.0"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+enigo = "0.5.0"
+napi = "3.0.0"
+napi-derive = "3.0.0"
+once_cell = "1.21.3"
+
+[build-dependencies]
+napi-build = "2"
+
+[profile.release]
+lto = true
+strip = "symbols"
