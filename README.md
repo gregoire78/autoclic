@@ -46,3 +46,67 @@ Navigate to the `📁 autoclic` folder, run `npm install`, then `npm run build`.
 Next, go to the `📁 autoclic-app` folder, run `npm install`, then `npm run dev`.
 
 In your browser, open the virtual desktop URL: http://localhost:6080/
+
+## 🛠️ Cross-Compile Guide
+
+For more details, refer to the official cross-build documentation.
+
+---
+
+### 🪟 Windows Target
+
+#### ✅ Using `cargo-xwin`
+
+Install the necessary tools:
+
+```sh
+rustup component add llvm-tools
+cargo install --locked cargo-xwin
+```
+
+Example build command:
+
+```sh
+cargo xwin build --release --target x86_64-pc-windows-msvc
+```
+
+#### ✅ With `napi-rs`
+
+To build with NAPI-RS for Windows:
+
+```sh
+napi build --platform --release --target x86_64-pc-windows-msvc --cross-compile
+```
+
+---
+
+### ⚡ Electron Build for Windows
+
+#### 🧰 Install Wine (on Debian/Ubuntu)
+
+Follow the Wine installation guide:
+
+```sh
+sudo dpkg --add-architecture i386
+sudo apt install --install-recommends winehq-stable
+
+sudo mkdir -pm755 /etc/apt/keyrings
+wget -O - https://dl.winehq.org/wine-builds/winehq.key | sudo gpg --dearmor -o /etc/apt/keyrings/winehq-archive.key
+
+sudo wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/dists/bookworm/winehq-bookworm.sources
+
+winecfg
+```
+
+Optional: Install NSIS for Windows installer creation
+
+```sh
+sudo apt install nsis
+```
+
+#### 🏗️ Build Electron App
+
+```sh
+npm run build:win
+```
+

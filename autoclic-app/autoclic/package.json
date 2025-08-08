@@ -37,6 +37,7 @@
     "artifacts": "napi artifacts",
     "bench": "node --import @oxc-node/core/register benchmark/bench.ts",
     "build": "napi build --platform --release",
+    "build:win": "napi build --platform --release --target x86_64-pc-windows-msvc --cross-compile",
     "build:debug": "napi build --platform",
     "format": "run-p format:prettier format:rs format:toml",
     "format:prettier": "prettier . -w",
