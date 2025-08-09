@@ -110,3 +110,18 @@ sudo apt install nsis
 npm run build:win
 ```
 
+### ⚡ Electron Build for Linux ARM
+
+Optional zig installation
+
+```sh
+sudo apt install -y tar xz-utils
+# Install zig
+wget https://ziglang.org/download/0.14.1/zig-x86_64-linux-0.14.1.tar.xz && \
+tar -C /usr/local -xf zig-x86_64-linux-0.14.1.tar.xz && \
+rm zig-x86_64-linux-0.14.1.tar.xz
+
+export PATH="$PWD/zig-linux-x86_64-0.11.0:$PATH"
+
+rustup target add aarch64-unknown-linux-gnu
+```
