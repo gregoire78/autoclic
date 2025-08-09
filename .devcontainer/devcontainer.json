@@ -7,7 +7,8 @@
 	"features": {
 		"ghcr.io/devcontainers/features/desktop-lite:1": {},
 		"ghcr.io/devcontainers/features/rust:1": {},
-		"ghcr.io/devcontainers-extra/features/zig:1": {}
+		"ghcr.io/devcontainers-extra/features/zig:1": {},
+		"ghcr.io/maks1ms/devcontainers-features/wine:0": {}
 	},
 	"forwardPorts": [6080],
 	"portsAttributes": {
