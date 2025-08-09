@@ -1,0 +1,75 @@
+name: Build & Release
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'  # Ex: v1.0.0
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build in Devcontainer
+        uses: devcontainers/ci@v0.3
+        with:
+          imageName: ghcr.io/gregoire78/autoclic-devcontainer
+          cacheFrom: ghcr.io/gregoire78/autoclic-devcontainer
+          push: always
+          runCmd: |
+            cd autoclic-app/autoclic && npm ci && npm run build && npm run build:linux:arm && npm run build:win && \
+            cd ../ && npm ci && npm run build:linux && npm run build:linux:arm64 && npm run build:win:port
+
+      - name: Upload binaries as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: binaries
+          path: |
+            autoclic-app/dist/autoclic-app-1.0.0-x86_64.AppImage
+            autoclic-app/dist/autoclic-app-1.0.0-amd64.deb
+            autoclic-app/dist/autoclic-app-1.0.0-x64.tar.gz
+            autoclic-app/dist/autoclic-app-1.0.0-arm64.AppImage
+            autoclic-app/dist/autoclic-app-1.0.0-arm64.deb
+            autoclic-app/dist/autoclic-app-1.0.0-arm64.tar.gz
+            autoclic-app/dist/autoclic-app-1.0.0-x64-portable.exe
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: binaries
+          path: ./
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: github.ref_type == 'tag'
+        with:
+          files: |
+            autoclic-app-1.0.0-x86_64.AppImage
+            autoclic-app-1.0.0-amd64.deb
+            autoclic-app-1.0.0-x64.tar.gz
+            autoclic-app-1.0.0-arm64.AppImage
+            autoclic-app-1.0.0-arm64.deb
+            autoclic-app-1.0.0-arm64.tar.gz
+            autoclic-app-1.0.0-x64-portable.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
