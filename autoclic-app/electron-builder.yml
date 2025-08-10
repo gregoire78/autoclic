@@ -13,12 +13,12 @@ asarUnpack:
 win:
   executableName: autoclic-app
 nsis:
-  artifactName: ${name}-${version}-${arch}-setup.${ext}
+  artifactName: ${name}_${version}_${arch}_setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
 portable:
-  artifactName: ${name}-${version}-${arch}-portable.${ext}
+  artifactName: ${name}_${version}_${arch}_portable.${ext}
 mac:
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:
@@ -36,11 +36,7 @@ linux:
     - tar.gz
   maintainer: electronjs.org
   category: Utility
-appImage:
-  artifactName: ${name}-${version}-${arch}.${ext}
-deb:
-  artifactName: ${name}-${version}-${arch}.${ext}
-artifactName: ${name}-${version}-${arch}.${ext}
+artifactName: ${name}_${version}_${platform}_${arch}.${ext}
 npmRebuild: false
 publish:
   provider: generic

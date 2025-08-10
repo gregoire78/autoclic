@@ -18,6 +18,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Get version from package.json
+        id: get_version
+        run: |
+          VERSION=$(jq -r .version autoclic-app/package.json)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: Login to GitHub Container Registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
@@ -37,17 +42,18 @@ jobs:
         with:
           name: binaries
           path: |
-            autoclic-app/dist/autoclic-app-1.0.0-x86_64.AppImage
-            autoclic-app/dist/autoclic-app-1.0.0-amd64.deb
-            autoclic-app/dist/autoclic-app-1.0.0-x64.tar.gz
-            autoclic-app/dist/autoclic-app-1.0.0-arm64.AppImage
-            autoclic-app/dist/autoclic-app-1.0.0-arm64.deb
-            autoclic-app/dist/autoclic-app-1.0.0-arm64.tar.gz
-            autoclic-app/dist/autoclic-app-1.0.0-x64-portable.exe
+            autoclic-app/dist/autoclic-app_${{ env.VERSION }}_linux_x86_64.AppImage
+            autoclic-app/dist/autoclic-app_${{ env.VERSION }}_linux_amd64.deb
+            autoclic-app/dist/autoclic-app_${{ env.VERSION }}_linux_x64.tar.gz
+            autoclic-app/dist/autoclic-app_${{ env.VERSION }}_linux_arm64.AppImage
+            autoclic-app/dist/autoclic-app_${{ env.VERSION }}_linux_arm64.deb
+            autoclic-app/dist/autoclic-app_${{ env.VERSION }}_linux_arm64.tar.gz
+            autoclic-app/dist/autoclic-app_${{ env.VERSION }}_x64_portable.exe
 
   release:
     needs: build
     runs-on: ubuntu-latest
+    if: github.ref_type == 'tag'
 
     steps:
       - name: Checkout code
@@ -61,15 +67,14 @@ jobs:
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
-        if: github.ref_type == 'tag'
         with:
           files: |
-            autoclic-app-1.0.0-x86_64.AppImage
-            autoclic-app-1.0.0-amd64.deb
-            autoclic-app-1.0.0-x64.tar.gz
-            autoclic-app-1.0.0-arm64.AppImage
-            autoclic-app-1.0.0-arm64.deb
-            autoclic-app-1.0.0-arm64.tar.gz
-            autoclic-app-1.0.0-x64-portable.exe
+            autoclic-app_${{ env.VERSION }}_linux_x86_64.AppImage
+            autoclic-app_${{ env.VERSION }}_linux_amd64.deb
+            autoclic-app_${{ env.VERSION }}_linux_x64.tar.gz
+            autoclic-app_${{ env.VERSION }}_linux_arm64.AppImage
+            autoclic-app_${{ env.VERSION }}_linux_arm64.deb
+            autoclic-app_${{ env.VERSION }}_linux_arm64.tar.gz
+            autoclic-app_${{ env.VERSION }}_x64_portable.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
