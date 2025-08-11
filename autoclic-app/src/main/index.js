@@ -12,12 +12,12 @@ const state = {
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 600,
-    height: 280,
+    width: 300,
+    height: 150,
     show: false,
     autoHideMenuBar: true,
     alwaysOnTop: true,
-    resizable: false,
+    resizable: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),

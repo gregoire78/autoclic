@@ -10,5 +10,5 @@ function handleStop() {
 </script>
 
 <template>
-  <button :disabled="isDisabled" @click="handleStop">Arrêter</button>
+  <button :disabled="isDisabled" style="width: 25%" @click="handleStop">Arrêter</button>
 </template>

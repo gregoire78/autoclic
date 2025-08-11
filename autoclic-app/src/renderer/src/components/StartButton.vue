@@ -42,7 +42,7 @@ defineExpose({ cancelCountdown })
 </script>
 
 <template>
-  <button :disabled="isCountingDown || isRunning" @click="startCountdown">
+  <button :disabled="isCountingDown || isRunning" style="min-width: 75%" @click="startCountdown">
     {{ isCountingDown ? `Démarrage dans ${countdown} sec...` : 'Démarrer' }}
   </button>
 </template>

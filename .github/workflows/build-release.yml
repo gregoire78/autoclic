@@ -58,6 +58,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Get version from package.json
+        id: get_version
+        run: |
+          VERSION=$(jq -r .version autoclic-app/package.json)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: Download artifacts
         uses: actions/download-artifact@v4

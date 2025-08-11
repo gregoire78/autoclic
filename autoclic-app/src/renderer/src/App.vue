@@ -1,6 +1,5 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import CounterClick from './components/CounterClick.vue'
 import ControlButtons from './components/ControlButtons.vue'
 
 const cps = ref()
@@ -9,7 +8,7 @@ const isRunning = ref(false)
 const containerStyle = computed(() => ({
   backgroundColor: isRunning.value ? 'orange' : 'var(--color-background)',
   padding: '10px',
-  height: 'calc(100% - 100px)'
+  height: '100%'
 }))
 
 onMounted(() => {
@@ -36,17 +35,21 @@ function handleStop() {
 
 <template>
   <div :style="containerStyle">
-    <div style="margin-bottom: 10px">
+    <div style="margin-bottom: 5px; font-size: 10px">
       Démarrer :
-      <kbd><kbd>⌘ Command</kbd> ou <kbd>Ctrl</kbd></kbd> + <kbd>Alt</kbd> + <kbd>A</kbd>
+      <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>A</kbd> Stop : <kbd>Q</kbd>
     </div>
-    <div style="margin-bottom: 10px">Stop : <kbd>Q</kbd></div>
-    <div>
-      1 clique toutes les
-      <input v-model.number="cps" type="number" min="0" @input="updateCps" />
-      millisecondes
+    <div style="margin-bottom: 5px">
+      cps :
+      <input
+        v-model.number="cps"
+        style="max-width: 30px"
+        type="number"
+        min="0"
+        @input="updateCps"
+      />
+      ms
     </div>
     <ControlButtons :is-running="isRunning" @start="handleStart" @stop="handleStop" />
   </div>
-  <CounterClick />
 </template>
