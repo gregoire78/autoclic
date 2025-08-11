@@ -20,7 +20,8 @@
 		"vscode": {
 			"extensions": [
 				"Vue.volar",
-				"eamodio.gitlens"
+				"eamodio.gitlens",
+				"github.vscode-github-actions"
 			]
 		}
 	},

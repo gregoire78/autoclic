@@ -43,7 +43,7 @@ function handleStop() {
       cps :
       <input
         v-model.number="cps"
-        style="max-width: 30px"
+        style="max-width: 100px"
         type="number"
         min="0"
         @input="updateCps"
