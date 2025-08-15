@@ -9,6 +9,12 @@ const api = {
   getCps: async () => {
     return await ipcRenderer.invoke('getCps')
   },
+  getMousePosition: async () => {
+    return await ipcRenderer.invoke('getMousePosition')
+  },
+  setMousePosition: async (position) => {
+    return await ipcRenderer.invoke('setMousePosition', position)
+  },
   receive: (channel, func) => {
     let validChannels = ['running']
     if (validChannels.includes(channel)) {

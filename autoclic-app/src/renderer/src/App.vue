@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import ControlButtons from './components/ControlButtons.vue'
+import GetMouseButtons from './components/GetMouseButtons.vue'
 
 const cps = ref()
 const isRunning = ref(false)
@@ -31,6 +32,10 @@ function handleStart() {
 function handleStop() {
   window.electron.ipcRenderer.send('stop')
 }
+
+function handlePosition(position) {
+  window.api.setMousePosition(position)
+}
 </script>
 
 <template>
@@ -50,6 +55,7 @@ function handleStop() {
       />
       ms
     </div>
+    <GetMouseButtons @position="handlePosition" />
     <ControlButtons :is-running="isRunning" @start="handleStart" @stop="handleStop" />
   </div>
 </template>

@@ -393,5 +393,9 @@ if (!nativeBinding) {
 }
 
 module.exports = nativeBinding
+module.exports.Coordinate = nativeBinding.Coordinate
+module.exports.getMousePosition = nativeBinding.getMousePosition
+module.exports.moveMouseWithPause = nativeBinding.moveMouseWithPause
 module.exports.startAutoclicker = nativeBinding.startAutoclicker
+module.exports.startAutoclickerWithCoord = nativeBinding.startAutoclickerWithCoord
 module.exports.stopAutoclicker = nativeBinding.stopAutoclicker

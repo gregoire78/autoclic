@@ -2,11 +2,17 @@ import { app, shell, BrowserWindow, ipcMain, globalShortcut } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import { startAutoclicker, stopAutoclicker } from 'autoclic'
+import {
+  startAutoclicker,
+  stopAutoclicker,
+  getMousePosition,
+  startAutoclickerWithCoord
+} from 'autoclic'
 
 const state = {
   working: false,
-  cps: 50
+  cps: 50,
+  cursorPosition: null
 }
 
 function createWindow() {
@@ -46,7 +52,11 @@ function createWindow() {
     if (!state.working) {
       state.working = true
       mainWindow.webContents.send('running', true)
-      startAutoclicker(state.cps)
+      if (state.cursorPosition) {
+        startAutoclickerWithCoord(state.cps, state.cursorPosition.x, state.cursorPosition.y)
+      } else {
+        startAutoclicker(state.cps)
+      }
     }
     globalShortcut.register('Q', () => stop())
   })
@@ -59,7 +69,11 @@ function createWindow() {
     if (!state.working) {
       state.working = true
       mainWindow.webContents.send('running', true)
-      startAutoclicker(state.cps)
+      if (state.cursorPosition) {
+        startAutoclickerWithCoord(state.cps, state.cursorPosition.x, state.cursorPosition.y)
+      } else {
+        startAutoclicker(state.cps)
+      }
     }
     if (globalShortcut.isRegistered('CommandOrControl+Alt+A')) {
       globalShortcut.register('Q', () => stop())
@@ -102,6 +116,13 @@ ipcMain.handle('setCps', (e, cps) => {
 })
 ipcMain.handle('getCps', () => {
   return state.cps
+})
+ipcMain.handle('getMousePosition', () => {
+  const position = getMousePosition()
+  return position
+})
+ipcMain.handle('setMousePosition', (e, position) => {
+  state.cursorPosition = position
 })
 
 app.on('will-quit', () => {
