@@ -45,7 +45,7 @@ function handlePosition(position) {
       <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>A</kbd> Stop : <kbd>Q</kbd>
     </div>
     <div style="margin-bottom: 5px">
-      cps :
+      Clic délais :
       <input
         v-model.number="cps"
         style="max-width: 100px"

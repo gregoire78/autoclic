@@ -13,6 +13,8 @@ use std::{
   time::Duration,
 };
 
+const MOVE_LOOP_DELAY_MS: u64 = 10;
+
 static AUTOCLICKER_STATE: Lazy<Mutex<Option<Arc<AtomicBool>>>> = Lazy::new(|| Mutex::new(None));
 
 fn is_autoclicker_running() -> bool {
@@ -24,19 +26,54 @@ fn is_autoclicker_running() -> bool {
 }
 
 fn set_autoclicker_flag(running: bool) {
-  let guard = AUTOCLICKER_STATE.lock().unwrap();
-  if let Some(flag) = guard.as_ref() {
+  if let Some(flag) = AUTOCLICKER_STATE.lock().unwrap().as_ref() {
     flag.store(running, Ordering::SeqCst);
   }
 }
 
 fn clear_autoclicker_flag() {
-  let mut guard = AUTOCLICKER_STATE.lock().unwrap();
-  *guard = None;
+  *AUTOCLICKER_STATE.lock().unwrap() = None;
 }
 
 fn create_enigo() -> Result<Enigo> {
   Enigo::new(&Settings::default()).map_err(|e| Error::from_reason(e.to_string()))
+}
+
+fn spawn_click_thread(running: Arc<AtomicBool>, interval_ms: u32) {
+  thread::spawn(move || {
+    let mut enigo = match create_enigo() {
+      Ok(e) => e,
+      Err(e) => {
+        eprintln!("Erreur création Enigo: {:?}", e);
+        return;
+      }
+    };
+    let delay = Duration::from_millis(interval_ms as u64);
+
+    while running.load(Ordering::SeqCst) {
+      let _ = enigo.button(Button::Left, Click);
+      thread::sleep(delay);
+    }
+  });
+}
+
+fn spawn_move_thread(running: Arc<AtomicBool>, x: i32, y: i32) {
+  thread::spawn(move || {
+    let mut enigo = match create_enigo() {
+      Ok(e) => e,
+      Err(e) => {
+        eprintln!("Erreur création Enigo: {:?}", e);
+        return;
+      }
+    };
+
+    while running.load(Ordering::SeqCst) {
+      if let Err(e) = enigo.move_mouse(x, y, EnigoCoord::Abs) {
+        eprintln!("Erreur déplacement souris: {:?}", e);
+      }
+      thread::sleep(Duration::from_millis(MOVE_LOOP_DELAY_MS));
+    }
+  });
 }
 
 #[napi]
@@ -48,15 +85,7 @@ pub fn start_autoclicker(interval_ms: u32) {
   let running = Arc::new(AtomicBool::new(true));
   *AUTOCLICKER_STATE.lock().unwrap() = Some(running.clone());
 
-  thread::spawn(move || {
-    let mut enigo = create_enigo().unwrap();
-    let delay = Duration::from_millis(interval_ms as u64);
-
-    while running.load(Ordering::SeqCst) {
-      let _ = enigo.button(Button::Left, Click);
-      thread::sleep(delay);
-    }
-  });
+  spawn_click_thread(running, interval_ms);
 }
 
 #[napi]
@@ -68,18 +97,8 @@ pub fn start_autoclicker_with_coord(interval_ms: u32, x: i32, y: i32) {
   let running = Arc::new(AtomicBool::new(true));
   *AUTOCLICKER_STATE.lock().unwrap() = Some(running.clone());
 
-  thread::spawn(move || {
-    let mut enigo = create_enigo().unwrap();
-    let delay = Duration::from_millis(interval_ms as u64);
-
-    while running.load(Ordering::SeqCst) {
-      if let Err(e) = enigo.move_mouse(x, y, EnigoCoord::Abs) {
-        eprintln!("Erreur déplacement souris: {:?}", e);
-      }
-      let _ = enigo.button(Button::Left, Click);
-      thread::sleep(delay);
-    }
-  });
+  spawn_click_thread(running.clone(), interval_ms);
+  spawn_move_thread(running, x, y);
 }
 
 #[napi]
@@ -97,9 +116,7 @@ pub struct MousePosition {
 #[napi]
 pub fn get_mouse_position() -> Result<MousePosition> {
   let enigo = create_enigo()?;
-  let (x, y) = enigo
-    .location()
-    .map_err(|e| Error::from_reason(e.to_string()))?;
+  let (x, y) = enigo.location().map_err(|e| Error::from_reason(e.to_string()))?;
   Ok(MousePosition { x, y })
 }
 
