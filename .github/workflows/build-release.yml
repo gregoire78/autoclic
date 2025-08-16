@@ -6,8 +6,6 @@ concurrency:
 
 on:
   push:
-    branches:
-      - main
     tags:
       - 'v*'  # Ex: v1.0.0
 
@@ -20,6 +18,12 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.get_version.outputs.VERSION }}
+    strategy:
+      matrix:
+        info:
+          - '{ "name": "linux_arm64", "napi_rs_cmd": "build:linux:arm64", "cmd": "build:linux:arm64" }'
+          - '{ "name": "linux",       "napi_rs_cmd": "build",             "cmd": "build:linux"       }'
+          - '{ "name": "windows",     "napi_rs_cmd": "build:win",         "cmd": "build:win:port"    }'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -39,21 +43,18 @@ jobs:
           cacheFrom: ghcr.io/gregoire78/autoclic-devcontainer
           push: always
           runCmd: |
-            cd autoclic-app/autoclic && npm ci && npm run build && npm run build:linux:arm && npm run build:win && \
-            cd ../ && npm ci && npm run build:linux && npm run build:linux:arm64 && npm run build:win:port
+            cd autoclic-app/autoclic && npm ci && npm run ${{ fromJSON(matrix.info).napi_rs_cmd }} && \
+            cd ../ && npm ci && npm run ${{ fromJSON(matrix.info).cmd }}
 
       - name: Upload binaries as artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: binaries
+          name: binaries-${{ fromJSON(matrix.info).name }}
           path: |
-            autoclic-app/dist/autoclic-app_${{ steps.get_version.outputs.VERSION }}_linux_x86_64.AppImage
-            autoclic-app/dist/autoclic-app_${{ steps.get_version.outputs.VERSION }}_linux_amd64.deb
-            autoclic-app/dist/autoclic-app_${{ steps.get_version.outputs.VERSION }}_linux_x64.tar.gz
-            autoclic-app/dist/autoclic-app_${{ steps.get_version.outputs.VERSION }}_linux_arm64.AppImage
-            autoclic-app/dist/autoclic-app_${{ steps.get_version.outputs.VERSION }}_linux_arm64.deb
-            autoclic-app/dist/autoclic-app_${{ steps.get_version.outputs.VERSION }}_linux_arm64.tar.gz
-            autoclic-app/dist/autoclic-app_${{ steps.get_version.outputs.VERSION }}_x64_portable.exe
+            autoclic-app/dist/*.AppImage
+            autoclic-app/dist/*.deb
+            autoclic-app/dist/*.tar.gz
+            autoclic-app/dist/*.exe
 
   release:
     needs: build
@@ -64,19 +65,11 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
-          name: binaries
-          path: ./
+          path: ./artifacts
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            autoclic-app_${{ needs.build.outputs.version }}_linux_x86_64.AppImage
-            autoclic-app_${{ needs.build.outputs.version }}_linux_amd64.deb
-            autoclic-app_${{ needs.build.outputs.version }}_linux_x64.tar.gz
-            autoclic-app_${{ needs.build.outputs.version }}_linux_arm64.AppImage
-            autoclic-app_${{ needs.build.outputs.version }}_linux_arm64.deb
-            autoclic-app_${{ needs.build.outputs.version }}_linux_arm64.tar.gz
-            autoclic-app_${{ needs.build.outputs.version }}_x64_portable.exe
+          files: artifacts/**/*.*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
